@@ -1,6 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from '.././logo.svg';
+import { Link } from 'react-router-dom'
+
+import { readMessages } from '../actions'
+
+import Message from '../components/chatRoom/Message'
+import MessageForm from '../components/chatRoom/MessageForm'
 
 function App() {
   return (
@@ -19,6 +24,9 @@ function App() {
           Learn React
         </a>
       </header>
+
+      <MessageForm/>
+      <Message />
     </div>
   );
 }

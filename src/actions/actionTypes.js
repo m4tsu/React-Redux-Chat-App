@@ -1,0 +1,3 @@
+
+export const READ_MESSAGES = 'READ_MESSAGES'
+export const POST_MESSAGE = 'POST_MESSAGE'
