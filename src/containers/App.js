@@ -3,15 +3,12 @@ import '../App.scss';
 import logo from '.././logo.svg';
 import { Link } from 'react-router-dom'
 
-import { readMessages } from '../actions'
-
-import Message from '../components/chatRoom/Message'
-import MessageForm from '../components/chatRoom/MessageForm'
+import Header from '../components/layout/Header'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -24,10 +21,7 @@ function App() {
         >
           Learn React
         </a>
-      </header>
-
-      <MessageForm/>
-      <Message />
+      </div>
     </div>
   );
 }

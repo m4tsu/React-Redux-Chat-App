@@ -5,8 +5,12 @@ import { Provider } from "react-redux";
 // import store from "./store";
 import './index.css';
 import reducer from './reducers'
-import App from './containers/App';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import {MuiThemeProvider} from '@material-ui/core/styles';
+import {muiTheme} from './muiTheme';
+
+import App from './containers/App';
+import ChatRoom from './containers/ChatRoom';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -15,9 +19,12 @@ const store = createStore(reducer)
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Switch>
-        <Route exact path='/' component={App} />
-      </Switch>
+      <MuiThemeProvider theme={muiTheme}>
+        <Switch>
+          <Route exact path='/' component={App} />
+          <Route exact path='/chat' component={ChatRoom} />
+        </Switch>
+      </MuiThemeProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')
