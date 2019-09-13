@@ -1,52 +1,54 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
+
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { withStyles } from '@material-ui/core/styles'
 
-import { readMessages } from '../../actions'
-
-// const styles = theme => ({
-//   root: {
-//     padding: theme.spacing.unit * 5,
-//   },
-//   content: {
-//     maxWidth: 800,
-//     marginLeft  : 'auto',
-//     marginRight : 'auto',
-//   },
-// })
+import { fetchMessages} from '../../actions'
 
 class Message extends Component {
+  componentDidMount() {
+    this.props.fetchMessages();
+  }
+
+  componentDidUpdate() {
+    console.log(this.props.messages);
+  }
+
+  renderMessages() {
+    return (
+      _.map(this.props.messages, message => {
+        return (
+          <ListItem key={message.id}>
+            <ListItemText className='message-user-name'>{message.userId}</ListItemText>
+            <ListItemText className='message-content'>{message.content}</ListItemText>
+          </ListItem>
+        );
+      })
+    )
+  }
+
   render() {
-    const messages = this.props.messages;
     const styles = {
       root: {
         padding: '50px',
       },
       content: {
         maxWidth: 800,
-        width: '80%',
+        width: '100%',
         marginLeft  : 'auto',
         marginRight : 'auto',
       },
     }
 
-    const messagesList = messages.map((message) => {
-      return (
-        <ListItem key={message.id}>
-          <ListItemText className='message-user-name'>{message.user}</ListItemText>
-          <ListItemText className='message-content'>{message.content}</ListItemText>
-        </ListItem>
-      )
-    });
-
     return (
       <React.Fragment>
         <div style={styles.root}>
           <div style={styles.content}>
-            <List className='messages-wrap'>{messagesList}</List>
+            <List className='messages-wrap'>{this.renderMessages()}</List>
           </div>
         </div>
       </React.Fragment>
@@ -54,7 +56,7 @@ class Message extends Component {
   }
 }
 
-const mapStateToProps = state => ({ messages: state.messages})
-// const mapDispatchToProps =
+const mapStateToProps = state => ({ messages: state.messages })
+const mapDispatchToProps = ({ fetchMessages })
 
-export default connect(mapStateToProps, null)(Message)
+export default connect(mapStateToProps, mapDispatchToProps)(Message)

@@ -1,29 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import '../App.scss';
-import logo from '.././logo.svg';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import firebase from 'firebase'
 import { Link } from 'react-router-dom'
+import {MuiThemeProvider} from '@material-ui/core/styles';
+import {muiTheme} from '../muiTheme';
+
+import PrivateRoute from '../components/layout/PrivateRoute'
+import Home from './Home';
+import Login from './Auth/Login';
+import SignUp from './Auth/SignUp';
+import ChatRoom from './ChatRoom';
 
 import Header from '../components/layout/Header'
 
-function App() {
-  return (
-    <div className="App">
-      <div className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </div>
-    </div>
-  );
+import { fetchAuth } from '../actions/index'
+
+class App extends Component {
+  componentWillMount() {
+    this.props.fetchAuth();
+  }
+
+  render() {
+    return (
+      <BrowserRouter>
+        <MuiThemeProvider theme={muiTheme}>
+          <Header/>
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <PrivateRoute path='/chat' component={ChatRoom} />
+            <Route path='/login' component={Login}/>
+            <Route path='/signup' component={SignUp} />
+          </Switch>
+        </MuiThemeProvider>
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App;
+
+const mapStateToProps = state => ({ auth: state.auth})
+const mapDispatchToProps = ({ fetchAuth })
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

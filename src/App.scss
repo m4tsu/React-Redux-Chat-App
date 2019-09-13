@@ -3,6 +3,11 @@ $bg-white: #F4F5F7;
 $bg-vue: #42b983;
 body {
   background-color: $bg-white;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 .App {

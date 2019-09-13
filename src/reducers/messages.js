@@ -1,36 +1,19 @@
 import * as actionTypes from '../actions/actionTypes'
+import lodash from 'lodash'
 
-const initialMessages = [
-  {
-    id: 1,
-    user:'sample_user',
-    content: 'sample_content',
-  },
-  {
-    id: 2,
-    user:'test_user',
-    content: 'test_content',
-  },
-]
-
-const messages = (messages = initialMessages, action) => {
+const messages = (messages = {}, action) => {
   switch(action.type) {
-    case actionTypes.READ_MESSAGES:
-      return (
-        [
-          ...messages
-        ]
-      )
     case actionTypes.POST_MESSAGE:
       return (
-        [
+        {
           ...messages,
-          {
-            id: messages.length + 1,
-            user: action.user,
-            content: action.content,
+          [action.message.id]: {
+            id: action.message.id,
+            userId: action.message.userId,
+            content: action.message.content,
+            createdAt: action.message.createdAt,
           }
-        ]
+        }
       )
     default:
       return (messages)

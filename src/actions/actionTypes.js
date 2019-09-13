@@ -1,3 +1,10 @@
+// Messages
+export const SUBSCRIBE = 'SUBSCRIBE'
 
 export const READ_MESSAGES = 'READ_MESSAGES'
+export const RECEIVE_MESSAGES = 'RECEIVE_MESSAGES'
 export const POST_MESSAGE = 'POST_MESSAGE'
+
+// User
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGOUT_SUCCESS= 'LOGOUT_SUCCESS'

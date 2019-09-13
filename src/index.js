@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from "react-redux";
+import thunk from 'redux-thunk';
 // import store from "./store";
 import './index.css';
 import reducer from './reducers'
@@ -11,21 +12,17 @@ import {muiTheme} from './muiTheme';
 
 import App from './containers/App';
 import ChatRoom from './containers/ChatRoom';
+import Home from './containers/Home'
+import Header from './components/layout/Header'
 
+// import firebase from 'firebase';
 import * as serviceWorker from './serviceWorker';
 
-const store = createStore(reducer)
+const store = createStore(reducer, applyMiddleware(thunk))
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <MuiThemeProvider theme={muiTheme}>
-        <Switch>
-          <Route exact path='/' component={App} />
-          <Route exact path='/chat' component={ChatRoom} />
-        </Switch>
-      </MuiThemeProvider>
-    </BrowserRouter>
+    <App/>
   </Provider>,
   document.getElementById('root')
 );
