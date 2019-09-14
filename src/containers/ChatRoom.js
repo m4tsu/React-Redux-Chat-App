@@ -8,7 +8,12 @@ import Messages from '../components/chatRoom/Messages'
 import MessageForm from '../components/chatRoom/MessageForm'
 import Header from '../components/layout/Header'
 
+import firebase from 'firebase'
+
 class ChatRoom extends Component {
+  componentWillUnmount(){
+    console.log(firebase.auth().currentUser)
+  }
   render() {
     return(
       <React.Fragment>

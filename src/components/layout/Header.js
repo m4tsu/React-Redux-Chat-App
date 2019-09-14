@@ -70,7 +70,7 @@ class Header extends Component {
               <Link to='/' style={{all: 'inherit'}} className={classes.link}> <MenuIcon /> </Link>
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              { auth.authenticated ? `${auth.currentUser.email} さん` : ''}
+              { auth.authenticated ? `${auth.currentUser.displayName} さん` : ''}
             </Typography>
             <nav>
               <Button color='inherit'><Link to='/chat' style={{all: 'inherit'}} className={classes.link}>チャット</Link></Button>

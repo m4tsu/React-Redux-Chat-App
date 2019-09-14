@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes'
-import { messagesRef } from '../firebase/firestore'
+import { messagesRef, usersRef } from '../firebase/firestore'
 import firebase from 'firebase'
 
 // Messages
@@ -54,14 +54,21 @@ export const fetchAuth = () => dispatch => {
 }
 
 export const loginSuccess = auth => dispatch => {
-  console.log('login success')
   console.log(auth)
   dispatch({type: actionTypes.LOGIN_SUCCESS, auth: auth});
+  console.log('login success')
 }
 
 export const logoutSuccess = () => dispatch => {
-  console.log('logout success')
   dispatch({type: actionTypes.LOGOUT_SUCCESS});
+  console.log('logout success')
 }
+
+// export const registerAppUser = userProfile => dispatch => {
+//   usersRef.add({
+//     uid: userProfile.uid,
+//     displayName: userProfile.userName
+//   })
+// }
 
 // User

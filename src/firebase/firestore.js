@@ -7,3 +7,5 @@ firebase.initializeApp(firebaseConfig);
 export const fireStore = firebase.firestore()
 
 export const messagesRef = fireStore.collection('messages')
+
+export const usersRef = fireStore.collection('users')

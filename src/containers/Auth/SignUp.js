@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import { usersRef } from '../../firebase/firestore'
 import { connect } from 'react-redux'
 import { Field, reduxForm, reset } from 'redux-form'
 import '../../App.scss';
@@ -10,8 +11,6 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-// import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -56,7 +55,19 @@ class SignUp extends Component {
   signUp(signUpInfo) {
     firebase.auth().createUserWithEmailAndPassword(signUpInfo.email, signUpInfo.password)
     .then(value => {
-      this.props.history.push('/');
+      value.user.updateProfile({
+        displayName: signUpInfo.userName,
+      })
+      .then(()=> {
+        this.props.history.push('/');
+      })
+      .catch(error => {
+        alert(error.mesasge)
+      })
+      // usersRef.add({
+      //   uid: value.user.uid,
+      //   displayName: signUpInfo.userName
+      // })
     })
     .catch(error => {
       alert(error.message)
@@ -64,7 +75,7 @@ class SignUp extends Component {
   }
 
   renderField(field) {
-    const { input, id, label, name, type } = field
+    const { input, id, label, name, type, meta: {touched, error} } = field
     return (
       <TextField
         variant="outlined"
@@ -75,13 +86,14 @@ class SignUp extends Component {
         label={label}
         name={name}
         type={type}
+        error={touched && !!error}
         {...input}
       />
     )
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props
+    const { handleSubmit, submitting, invalid } = this.props
     const classes = this.props.classes
     return (
       <Container component="main" maxWidth="xs">
@@ -94,7 +106,8 @@ class SignUp extends Component {
           Sign UP
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit(this.onSubmit)}>
-          <Field id='email' label='Email Address' name='email' type='email' component={this.renderField}/>
+          <Field id='userName' label='User Name' name='userName' type='text' component={this.renderField} />
+          <Field id='email' label='Email' name='email' type='email' component={this.renderField}/>
           <Field id='password' label='Password' name='password' type='password' component={this.renderField}/>
           <Button
             type="submit"
@@ -102,7 +115,7 @@ class SignUp extends Component {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={submitting}
+            disabled={submitting || invalid}
           >
             Sign UP
           </Button>
@@ -125,6 +138,13 @@ class SignUp extends Component {
   }
 }
 
+const validate = values => {
+  const errors = {}
+  if (!values.userName) errors.userName = 'User Name is required'
+  if (!values.email) errors.email = 'Email is required'
+  if (!values.password || (values.password.length < 6)) errors.password ='Password is required'
+  return errors
+}
 // export default withStyles(loginStyles)(Login) ;
 
 const mapStateToProps = state => ({ auth: state.auth })
@@ -132,6 +152,7 @@ const mapStateToProps = state => ({ auth: state.auth })
 
 export default withStyles(loginStyles)(connect(mapStateToProps, null)(
   reduxForm({
-    form: 'loginForm'
+    form: 'loginForm',
+    validate
   })(SignUp)
   ))

@@ -68,7 +68,7 @@ class Login extends Component {
   }
 
   renderField(field) {
-    const { input, id, label, name, type } = field
+    const { input, id, label, name, type, meta: {touched, error} } = field
     return (
       <TextField
         variant="outlined"
@@ -79,13 +79,14 @@ class Login extends Component {
         label={label}
         name={name}
         type={type}
+        error={touched && !!error}
         {...input}
       />
     )
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props
+    const { handleSubmit, submitting, invalid } = this.props
     const classes = this.props.classes
     return (
       <Container component="main" maxWidth="xs">
@@ -106,7 +107,7 @@ class Login extends Component {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={submitting}
+            disabled={submitting || invalid}
           >
             Sign In
           </Button>
@@ -129,6 +130,13 @@ class Login extends Component {
   }
 }
 
+const validate = values => {
+  const errors = {}
+  if (!values.email) errors.email = 'Email is required'
+  if (!values.password || (values.password.length < 6)) errors.password ='Password is required'
+  return errors
+}
+
 // export default withStyles(loginStyles)(Login) ;
 
 const mapStateToProps = state => ({ auth: state.auth })
@@ -136,6 +144,7 @@ const mapStateToProps = state => ({ auth: state.auth })
 
 export default withStyles(loginStyles)(connect(mapStateToProps, null)(
   reduxForm({
-    form: 'loginForm'
+    form: 'loginForm',
+    validate
   })(Login)
   ))
