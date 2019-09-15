@@ -1,6 +1,5 @@
 import React from 'react';
 import {  Route, Redirect } from 'react-router-dom';
-import firebase from 'firebase';
 
 function PrivateRoute({ component: Component, auth , ...rest }) {
   if(auth.loading) {

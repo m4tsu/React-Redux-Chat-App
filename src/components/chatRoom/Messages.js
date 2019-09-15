@@ -5,7 +5,6 @@ import _ from 'lodash';
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { withStyles } from '@material-ui/core/styles'
 import DeleteOutlinedIcon from '@material-ui/icons/Delete'
 
 import { fetchMessages, deleteMessage } from '../../actions'
@@ -34,7 +33,7 @@ class Message extends Component {
           <div key={message.id} className={`message-wrap ${fromOthers ? 'others' : 'own'}`} >
             <ListItem className='message-item' >
               {fromOthers ? <ListItemText>@{message.userName}</ListItemText> : ''}
-              <ListItemText className='message-content'>{message.content}</ListItemText>
+              <ListItemText style={{whiteSpace: 'pre-line'}} className='message-content'>{message.content}</ListItemText>
             </ListItem>
             {fromOthers ? '' : <Button id='delete-message-button' onClick={this.onClickDelete.bind(this, message.id)}><DeleteOutlinedIcon/></Button> }
           </div>

@@ -6,19 +6,19 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper'
-import { makeStyles } from '@material-ui/core/styles'
 
 import { postMessage } from '../../actions'
-import clsx from 'clsx';
 
 class MessageForm extends Component {
   constructor(props) {
     super(props)
     this.onSubmit = this.onSubmit.bind(this)
+    this.renderField= this.renderField.bind(this)
   }
 
   renderField(field) {
     const { input, label, type, meta: { touched, error }} = field
+    console.log(input.value)
     return(
       <TextField
         label={label}
@@ -30,6 +30,13 @@ class MessageForm extends Component {
         error={!!(touched && error)}
         helperText={touched && error}
         {...input}
+        onKeyPress={(event) => {
+          if(event.key === 'Enter' && !error) {
+            this.onSubmit({content: input.value})
+            event.preventDefault()
+            this.props.reset('MessageForm')
+          }
+        }}
       />
     )
   }
@@ -51,7 +58,7 @@ class MessageForm extends Component {
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <Grid container justify='center' spacing={2}>
               <Grid item xs={6}>
-                <Field label='Message' name='content' type='textarea' component={this.renderField}/>
+                <Field label='Message' name='content' type='textarea' component={this.renderField} />
               </Grid>
               <Grid item xs={3}>
                 <Button type='submit' variant='contained' children='Send' color='primary' style={style} disabled={submitting}/>

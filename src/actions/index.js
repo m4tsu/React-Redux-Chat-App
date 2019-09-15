@@ -4,29 +4,56 @@ import firebase from 'firebase'
 
 // Messages
 
+const setMessage = snapshot => async dispatch => {
+  for(let change of snapshot.docChanges()){
+    if(change.type === 'added') {
+      const messageDoc = change.doc;
+      const author = await change.doc.data().userRef.get()
+      const message = {
+        id: messageDoc.id,
+        userName: author.data().displayName,
+        content: messageDoc.data().content,
+        createdAt: messageDoc.data().createdAt,
+      }
+      dispatch({type: actionTypes.POST_MESSAGE, message: message});
+      const root = document.getElementById('root');
+      window.scrollTo(0, root.clientHeight);
+    }
+    if(change.type === 'removed') {
+      const message = {
+        id: change.doc.id
+      }
+      dispatch({type: actionTypes.DELETE_MESSAGE, message: message});
+    }
+  }
+}
+
 export const fetchMessages = () => dispatch => {
   messagesRef.orderBy('createdAt', 'asc').onSnapshot(snapshot  => {
-    snapshot.docChanges().forEach( async change => {
-      let message ={}
-      await change.doc.data().userRef.get()
-      .then(user => {
-        message = {
-          id: change.doc.id,
-          userName: user.data().displayName,
-          content: change.doc.data().content,
-          createdAt: change.doc.data().createdAt
-        }
-      })
 
-      if (change.type === 'added') {
-        dispatch({type: actionTypes.POST_MESSAGE, message: message});
-        const root = document.getElementById('root');
-        window.scrollTo(0, root.clientHeight);
-      }
-      if (change.type === 'removed') {
-        dispatch({type: actionTypes.DELETE_MESSAGE, message: message});
-      }
-    })
+    dispatch(setMessage(snapshot))
+    // snapshot.docChanges().forEach( async change => {
+    //   console.log(change.doc.data().userRef)
+    //   let message ={}
+    //   await change.doc.data().userRef.get()
+    //   .then(user => {
+    //     message = {
+    //       id: change.doc.id,
+    //       userName: user.data().displayName,
+    //       content: change.doc.data().content,
+    //       createdAt: change.doc.data().createdAt
+    //     }
+    //   })
+
+    //   if (change.type === 'added') {
+    //     dispatch({type: actionTypes.POST_MESSAGE, message: message});
+    //     const root = document.getElementById('root');
+    //     window.scrollTo(0, root.clientHeight);
+    //   }
+    //   if (change.type === 'removed') {
+    //     dispatch({type: actionTypes.DELETE_MESSAGE, message: message});
+    //   }
+    // })
   })
 }
 
