@@ -11,17 +11,11 @@ import Header from '../components/layout/Header'
 import firebase from 'firebase'
 
 class ChatRoom extends Component {
-  componentWillUnmount(){
-    console.log(firebase.auth().currentUser)
-  }
   render() {
     return(
       <React.Fragment>
-        <Header/>
         <div style={{width: '80%', maxWidth: '800px' , margin: '0 auto'}}>
-          <Paper>
-            <Messages/>
-          </Paper>
+          <Messages/>
         </div>
         <MessageForm/>
       </React.Fragment>

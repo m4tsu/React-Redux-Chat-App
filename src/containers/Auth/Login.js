@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Field, reduxForm, reset } from 'redux-form'
 import '../../App.scss';
 import { Link } from 'react-router-dom'
-// import { login } from '../../actions'
+import { authLoading } from '../../actions'
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -58,6 +58,7 @@ class Login extends Component {
     console.log(loginInfo)
     firebase.auth().signInWithEmailAndPassword(loginInfo.email, loginInfo.password)
     .then(value => {
+      this.props.authLoading();
       console.log('login successed')
       this.props.history.push('/chat')
     })
@@ -99,7 +100,7 @@ class Login extends Component {
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit(this.onSubmit)}>
-          <Field id='email' label='Email Address' name='email' type='email' component={this.renderField}/>
+          <Field id='email' label='Email' name='email' type='email' component={this.renderField}/>
           <Field id='password' label='Password' name='password' type='password' component={this.renderField}/>
           <Button
             type="submit"
@@ -140,9 +141,9 @@ const validate = values => {
 // export default withStyles(loginStyles)(Login) ;
 
 const mapStateToProps = state => ({ auth: state.auth })
-// const mapDispatchToProps = ({ login })
+const mapDispatchToProps = ({ authLoading })
 
-export default withStyles(loginStyles)(connect(mapStateToProps, null)(
+export default withStyles(loginStyles)(connect(mapStateToProps, mapDispatchToProps)(
   reduxForm({
     form: 'loginForm',
     validate

@@ -2,14 +2,19 @@ import React from 'react';
 import {  Route, Redirect } from 'react-router-dom';
 import firebase from 'firebase';
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ component: Component, auth , ...rest }) {
+  if(auth.loading) {
+    return (
+      <div>Now Loading...</div>
+    )
+  }
   return (
     <Route
       {...rest}
       render={props =>
         // ここで認証状態を取得します。
         // firebaseだったらfirebase.auth.currentUser !== nullとかで同様になります。
-        firebase.auth().currentUser !== null ? (
+        auth.authenticated  ? (
           // ログイン済みならば、PrivateRouteに渡されたcomponentを返します。
           <Component {...props} />
         ) : (

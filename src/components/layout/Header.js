@@ -30,9 +30,14 @@ class Header extends Component {
     this.onSignoutClick = this.onSignoutClick.bind(this)
   }
 
+  componentDidUpdate() {
+    console.log(this.props.auth)
+  }
+
   onSignoutClick() {
     this.logout();
   }
+
   logout(){
     firebase.auth().signOut()
     .then(() => {
@@ -70,7 +75,7 @@ class Header extends Component {
               <Link to='/' style={{all: 'inherit'}} className={classes.link}> <MenuIcon /> </Link>
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              { auth.authenticated ? `${auth.currentUser.displayName} さん` : ''}
+              { !!auth.currentUser.displayName ? `${auth.currentUser.displayName}` : ''}
             </Typography>
             <nav>
               <Button color='inherit'><Link to='/chat' style={{all: 'inherit'}} className={classes.link}>チャット</Link></Button>

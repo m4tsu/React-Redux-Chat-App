@@ -23,13 +23,19 @@ class App extends Component {
   }
 
   render() {
+    const auth = this.props.auth
+    if(auth.loading) {
+      return (
+        <div>Now Loading...</div>
+      )
+    }
     return (
       <BrowserRouter>
         <MuiThemeProvider theme={muiTheme}>
           <Header/>
           <Switch>
             <Route exact path='/' component={Home} />
-            <PrivateRoute path='/chat' component={ChatRoom} />
+            <PrivateRoute path='/chat' component={ChatRoom} auth={auth} />
             <Route path='/login' component={Login}/>
             <Route path='/signup' component={SignUp} />
           </Switch>

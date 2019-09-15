@@ -8,11 +8,15 @@ const messages = (messages = {}, action) => {
         {
           ...messages,
           [action.message.id]: {
-            id: action.message.id,
-            userId: action.message.userId,
-            content: action.message.content,
-            createdAt: action.message.createdAt,
+            ...action.message
           }
+        }
+      )
+    case actionTypes.DELETE_MESSAGE:
+      delete messages[action.message.id]
+      return (
+        {
+          ...messages
         }
       )
     default:

@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import { Field, reduxForm, reset } from 'redux-form'
 import '../../App.scss';
 import { Link } from 'react-router-dom'
+import { authLoading, updateUserName } from '../../actions'
+
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -55,19 +57,20 @@ class SignUp extends Component {
   signUp(signUpInfo) {
     firebase.auth().createUserWithEmailAndPassword(signUpInfo.email, signUpInfo.password)
     .then(value => {
+      usersRef.doc(value.user.uid).set({
+        displayName: signUpInfo.userName,
+        uid: value.user.uid,
+      })
       value.user.updateProfile({
         displayName: signUpInfo.userName,
       })
       .then(()=> {
+        this.props.updateUserName(signUpInfo.userName)
         this.props.history.push('/');
       })
       .catch(error => {
         alert(error.mesasge)
       })
-      // usersRef.add({
-      //   uid: value.user.uid,
-      //   displayName: signUpInfo.userName
-      // })
     })
     .catch(error => {
       alert(error.message)
@@ -148,9 +151,9 @@ const validate = values => {
 // export default withStyles(loginStyles)(Login) ;
 
 const mapStateToProps = state => ({ auth: state.auth })
-// const mapDispatchToProps = ({ signUp })
+const mapDispatchToProps = ({ updateUserName })
 
-export default withStyles(loginStyles)(connect(mapStateToProps, null)(
+export default withStyles(loginStyles)(connect(mapStateToProps, mapDispatchToProps)(
   reduxForm({
     form: 'loginForm',
     validate

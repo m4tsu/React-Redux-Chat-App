@@ -7,25 +7,36 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { withStyles } from '@material-ui/core/styles'
 
-import { fetchMessages} from '../../actions'
+import { fetchMessages, deleteMessage } from '../../actions'
+import { Button } from '@material-ui/core';
 
 class Message extends Component {
+  constructor(props) {
+    super(props)
+    this.onClickDelete = this.onClickDelete.bind(this)
+  }
+
   componentDidMount() {
     this.props.fetchMessages();
   }
 
-  componentDidUpdate() {
-    console.log(this.props.messages);
+  onClickDelete(messageId) {
+    // console.log(messageId)
+    this.props.deleteMessage(messageId)
   }
 
   renderMessages() {
     return (
       _.map(this.props.messages, message => {
+        const fromOthers = !(this.props.auth.currentUser.displayName === message.userName)
         return (
-          <ListItem key={message.id}>
-            <ListItemText className='message-user-name'>{message.userId}</ListItemText>
-            <ListItemText className='message-content'>{message.content}</ListItemText>
-          </ListItem>
+          <div key={message.id} className={`message-wrap ${fromOthers ? 'others' : 'own'}`} >
+            <ListItem className='message-item' >
+              {fromOthers ? <ListItemText>@{message.userName}</ListItemText> : ''}
+              <ListItemText className='message-content'>{message.content}</ListItemText>
+            </ListItem>
+            <Button onClick={this.onClickDelete.bind(this, message.id)}>削除</Button>
+          </div>
         );
       })
     )
@@ -46,17 +57,15 @@ class Message extends Component {
 
     return (
       <React.Fragment>
-        <div style={styles.root}>
-          <div style={styles.content}>
-            <List className='messages-wrap'>{this.renderMessages()}</List>
-          </div>
+        <div style={styles.content}>
+          <List className='messages-wrap'>{this.renderMessages()}</List>
         </div>
       </React.Fragment>
     )
   }
 }
 
-const mapStateToProps = state => ({ messages: state.messages })
-const mapDispatchToProps = ({ fetchMessages })
+const mapStateToProps = state => ({ messages: state.messages, auth: state.auth })
+const mapDispatchToProps = ({ fetchMessages, deleteMessage })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Message)

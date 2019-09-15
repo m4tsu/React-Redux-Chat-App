@@ -36,6 +36,7 @@ class MessageForm extends Component {
 
   onSubmit(message) {
     message.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    message.uid = this.props.auth.currentUser.uid
     this.props.postMessage(message)
   }
 
@@ -49,11 +50,8 @@ class MessageForm extends Component {
         <Paper style = {messageFormStyle}>
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <Grid container justify='center' spacing={2}>
-              <Grid item xs={3}>
-                <Field label='User' name='user' type='text' component={this.renderField}/>
-              </Grid >
               <Grid item xs={6}>
-                <Field label='Content' name='content' type='textarea' component={this.renderField}/>
+                <Field label='Message' name='content' type='textarea' component={this.renderField}/>
               </Grid>
               <Grid item xs={3}>
                 <Button type='submit' variant='contained' children='Send' color='primary' style={style} disabled={submitting}/>
@@ -68,17 +66,18 @@ class MessageForm extends Component {
 
 const validate = message => {
   const errors = {}
-  if (!message.user) errors.user = 'User Name required.'
   if(!message.content) errors.content = 'Content required.'
   return errors;
 }
 
-const afterSubmit = (result, dispatch) =>
+const afterSubmit = (result, dispatch) => {
   dispatch(reset('messageNewForm'));
+}
 
+const mapStateToProps = state => ({ auth: state.auth})
 const mapDispatchToProps = ({postMessage})
 
-export default connect(null, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   reduxForm({
     validate,
     form: 'messageNewForm',

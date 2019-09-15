@@ -35,6 +35,55 @@ body {
   color: #61dafb;
 }
 
+.message-item {
+  margin-bottom: 10px;
+  width: 75%!important;
+  position: relative;
+  display: inline-block;
+  flex-direction: column;
+  align-items: initial!important;
+  border-radius: 4px;
+
+}
+.message-wrap.own {
+  display: flex;
+  justify-content: flex-end;
+  .message-item {
+    background-color: #deefe8;
+    &::before {
+      position: absolute;
+      content: '';
+      display: block;
+      right: -16px;
+      top: 4px;
+      border: 4px solid transparent;
+      border-left: 12px solid #deefe8;
+    }
+  }
+}
+.message-wrap.others {
+  display: flex;
+  justify-content: flex-start;
+  .message-item {
+    background-color: white;
+    &::before {
+      position: absolute;
+      content: '';
+      display: block;
+      left: -16px;
+      top: 4px;
+      border: 4px solid transparent;
+      border-right: 12px solid white;
+    }
+  }
+}
+
+.message-content {
+  margin: 10px 0!important;
+}
+
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
