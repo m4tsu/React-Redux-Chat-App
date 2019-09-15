@@ -6,6 +6,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { withStyles } from '@material-ui/core/styles'
+import DeleteOutlinedIcon from '@material-ui/icons/Delete'
 
 import { fetchMessages, deleteMessage } from '../../actions'
 import { Button } from '@material-ui/core';
@@ -35,7 +36,7 @@ class Message extends Component {
               {fromOthers ? <ListItemText>@{message.userName}</ListItemText> : ''}
               <ListItemText className='message-content'>{message.content}</ListItemText>
             </ListItem>
-            <Button onClick={this.onClickDelete.bind(this, message.id)}>削除</Button>
+            {fromOthers ? '' : <Button id='delete-message-button' onClick={this.onClickDelete.bind(this, message.id)}><DeleteOutlinedIcon/></Button> }
           </div>
         );
       })
