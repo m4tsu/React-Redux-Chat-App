@@ -1,7 +1,7 @@
-https://react-redux-chat-app-1212c.firebaseapp.com
+https://react-redux-chat-app-1212c.firebaseapp.com  
 React + Redux, ホスティングにFirebase, DBにFirestore を仕様したリアルタイムに更新されるチャットアプリケーションです。
 
-ログイン画面から以下のメールアドレス、パスワードでログインして、「チャット」ページに遷移してください。
+ログイン画面から以下のメールアドレス、パスワードでログインして、「チャット」ページに遷移してください。  
 email: test1@example.com 
 pass: testtest
 または
